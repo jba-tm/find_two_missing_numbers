@@ -1,12 +1,69 @@
-def find_missing_numbers(data: list) -> list:
-    return sorted(set(range(data[0], data[-1])) - set(data))
+# Python Program to find 2 Missing
+# Numbers using O(1)
+# extra space and no overflow.
+
+# Function to find two missing
+# numbers in range
+# [1, n]. This function assumes
+# that size of array
+# is n-2 and all array elements
+# are distinct
+def find_two_missing_numbers(arr: list):
+    # Get the XOR of all
+    # elements in arr[] and
+    # {1, 2 .. n}
+    n = 2 + len(arr)
+
+    xor = arr[0]
+    for i in range(1, n - 2):
+        xor ^= arr[i]
+    for i in range(1, n + 1):
+        xor ^= i
+
+    # Now XOR has XOR of two
+    # missing elements. Any set
+    # bit in it must be set in
+    # one missing and unset in
+    # other missing number
+
+    # Get a set bit of XOR
+    # (We get the rightmost set bit)
+    set_bit_no = xor & ~(xor - 1)
+
+    # Now divide elements in two sets
+    # by comparing rightmost
+    # set bit of XOR with bit at same
+    # position in each element.
+    x = 0
+
+    # Initialize missing numbers
+    y = 0
+    for i in range(0, n - 2):
+        if arr[i] & set_bit_no:
+
+            # XOR of first set in arr[]
+            x = x ^ arr[i]
+        else:
+
+            # XOR of second set in arr[]
+            y = y ^ arr[i]
+    for i in range(1, n + 1):
+        if i & set_bit_no:
+
+            # XOR of first set in arr[] and
+            # {1, 2, ...n }
+            x = x ^ i
+
+        else:
+
+            # XOR of second set in arr[] and
+            # {1, 2, ...n }
+            y = y ^ i
+
+    print(x, y)
 
 
-def main() -> None:
-    """
-    Find multiple missing numbers
-    :return:
-    """
+def main():
     data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
             30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56,
             57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83,
@@ -54,7 +111,8 @@ def main() -> None:
             949, 950, 951, 952, 953, 954, 955, 956, 957, 958, 959, 960, 961, 962, 963, 964, 965, 966, 967, 968, 969,
             970, 971, 972, 973, 974, 975, 976, 977, 978, 979, 980, 981, 982, 983, 984, 985, 986, 987, 988, 989, 990,
             991, 992, 993, 994, 995, 996, 997, 998, 999]
-    print(find_missing_numbers(data))
+
+    find_two_missing_numbers(data)
 
 
 if __name__ == '__main__':
